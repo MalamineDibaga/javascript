@@ -1,0 +1,62 @@
+{
+    "chaine 1": {
+        "chaine": "TF1",
+        "multicast": "239.1.1.1",
+        "port": 1234
+    },
+    "chaine 2": {
+        "chaine": "BFMTV",
+        "multicast": "239.1.1.2",
+        "port": 1234
+    },
+    "chaine 3": {
+        "chaine": "France2",
+        "multicast": "239.1.1.3",
+        "port": 1234
+    },
+    "chaine 4": {
+        "chaine": "France 4",
+        "multicast": "239.1.1.4",
+        "port": 1234
+    },
+    "chaine 5": {
+        "chaine": "France 5",
+        "multicast": "239.1.1.5",
+        "port": 1234
+    },
+    "chaine 6": {
+        "chaine": "M6",
+        "multicast": "239.1.1.6",
+        "port": 1234
+    },
+    "chaine 7": {
+        "chaine": "ARTE",
+        "multicast": "239.1.1.7",
+        "port": 1234
+    },
+    "chaine 8": {
+        "chaine": "",
+        "multicast": "",
+        "port": 0
+    },
+    "chaine 9": {
+        "chaine": "C8",
+        "multicast": "239.1.1.19",
+        "port": 1234
+    },
+    "chaine 10": {
+        "chaine": "",
+        "multicast": "",
+        "port": 0
+    },
+    "chaine 11": {
+        "chaine": "",
+        "multicast": "",
+        "port": 0
+    },
+    "chaine 12": {
+        "chaine": "",
+        "multicast": "",
+        "port": 0
+    }
+}

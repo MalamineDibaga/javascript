@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page protégée - NASA</title>
+    
+</head>
+<body>
+
+    <h2>NASA</h2>
+    
+   
+    <div id="formulaireMotDePasse">
+        <form onsubmit="verifierMotDePasse(event)">
+            <label for="motDePasse">Entrez le mot de passe :</label>
+            <input type="text" id="motDePasse" name="motDePasse" required><br><br>
+            <label> Cette page est reservee au personel de la NASA, si vous ne travaillez pas a la NASA, inutile d'insister, vous ne trouverez jamais le mot de passe ! </label><br><br>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+
+ 
+    <div id="contenuProtege" style="display: none;">
+        <h3>Voici les code d'access :</h3>
+        
+        <pre>
+            CDF5-GTUG-VBG5-V34-78HN-H45T-PDRGV
+            
+            Cette page est réservée au personnel de la NASA. N'oubliez pas de la visiter régulièrement car les codes d'acces sont changes toutes les semaines
+        
+        </pre>
+    </div>
+    <script src="formulaire3.js"></script>
+</body>
+</html>
