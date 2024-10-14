@@ -1,5 +1,5 @@
 function mac_valide(mac) {
-    const regex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+    const regex = /^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$/;
     return regex.test(mac);
 }
 
