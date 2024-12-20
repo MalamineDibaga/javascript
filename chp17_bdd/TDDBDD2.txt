@@ -1,0 +1,165 @@
+TDDBDD2
+---
+
+1. Création de la base de données
+
+CREATE DATABASE EX2;
+USE EX2;
+
+
+---
+
+# 2. Création des tables
+
+CREATE TABLE Outils (
+    IDOUTIL INT(10) PRIMARY KEY,
+    OUTILS VARCHAR(25),
+    METIERS VARCHAR(25),
+    LOCALISATION VARCHAR(25),
+    IDPROPRIO INT(10) INDEX
+);
+
+CREATE TABLE Proprietaires (
+    IDPROPRIO INT(10) PRIMARY KEY,
+    NOM VARCHAR(25),
+    PRENOM VARCHAR(25),
+    TELEPHONE INT(10)
+);
+
+
+---
+
+3. Insertion des données
+
+Table `Outils`
+
+INSERT INTO Outils (IDOUTIL, OUTILS, METIERS, LOCALISATION, IDPROPRIO) VALUES
+(1, 'Marteau', 'Menuisier', 'K208', 1),
+(2, 'Fer à souder', 'Electronicien', 'L327', 2),
+(3, 'Tournevis', 'Electricien', 'K208', 3),
+(4, 'Serre-joint', 'Menuisier', 'K206', 4),
+(5, 'Pince coupante', 'Electricien', 'K201', 3),
+(6, 'Sécateur', 'Jardinier', 'K010', 5),
+(7, 'Scie sauteuse', 'Menuisier', 'K101', 4),
+(8, 'Ponçeuse à bande', 'Menuisier', 'K208', 4);
+
+
+Table `Proprietaires`
+
+INSERT INTO Proprietaires (IDPROPRIO, NOM, PRENOM, TELEPHONE) VALUES
+(1, 'Hammer', 'Johnny', 0684621465),
+(2, 'Soldering', 'Jack', 0678275112),
+(3, 'Wood', 'Michel', 0752569413),
+(4, 'Screw', 'Louis', 0154982873),
+(5, 'Garden', 'Marie', 0798093751),
+(6, 'Black', 'Laure', 0299485217),
+(7, 'White', 'Laurent', 0600642711),
+(8, 'Brown', 'Franck', 0612345678);
+
+
+---
+
+4. INNER JOIN pour toutes les colonnes
+
+SELECT *
+FROM Outils
+INNER JOIN Proprietaires
+ON Outils.IDPROPRIO = Proprietaires.IDPROPRIO;
+
+
+---
+
+5. INNER JOIN pour certaines colonnes
+
+SELECT Outils.OUTILS, Proprietaires.NOM, Proprietaires.PRENOM
+FROM Outils
+INNER JOIN Proprietaires
+ON Outils.IDPROPRIO = Proprietaires.IDPROPRIO;
+
+
+---
+
+ 6. RIGHT JOIN pour toutes les colonnes
+
+SELECT *
+FROM Outils
+RIGHT JOIN Proprietaires
+ON Outils.IDPROPRIO = Proprietaires.IDPROPRIO;
+
+Différence : Le `RIGHT JOIN` inclut tous les enregistrements de la table `Proprietaires`, même s'il n'y a pas de correspondance dans `Outils`.
+
+---
+
+### 7. LEFT JOIN pour toutes les colonnes
+
+SELECT *
+FROM Outils
+LEFT JOIN Propriétaires
+ON Outils.IDPROPRIO = Propriétaires.IDPROPRIO;
+
+Constat : Le `LEFT JOIN` inclut tous les enregistrements de la table `Outils` même s'il n'y a pas de correspondance dans `Proprietaires`.
+
+---
+
+ 8. Suppression de la ligne 1 dans `Proprietaires`
+
+DELETE FROM Proprietaires WHERE IDPROPRIO = 1;
+
+
+---
+
+ 9. LEFT JOIN après suppression
+
+SELECT *
+FROM Outils
+LEFT JOIN Proprietaires
+ON Outils.IDPROPRIO = Proprietaires.IDPROPRIO;
+
+Changement : Les enregistrements dans `Outils` associés à `IDPROPRIO = 1` vont afficher des `NULL` pour les colonnes de `Proprietaires`.
+
+---
+
+10. Réinsertion de la ligne 1
+
+INSERT INTO Propriétaires (IDPROPRIO, NOM, PRENOM, TELEPHONE) VALUES
+(1, 'Hammer', 'Johnny', 0684621465);
+
+
+---
+
+11. Transformation de `IDPROPRIO` en clé étrangère
+
+ALTER TABLE Outils
+ADD CONSTRAINT fk_proprietaire
+FOREIGN KEY (IDPROPRIO) REFERENCES Propriétaires(IDPROPRIO)
+ON DELETE CASCADE;
+
+
+---
+
+12. Suppression de la ligne 1 après création de la clé étrangère
+
+DELETE FROM Propriétaires WHERE IDPROPRIO = 1;
+
+
+---
+
+13. LEFT JOIN après suppression avec clé étrangère
+
+SELECT *
+FROM Outils
+LEFT JOIN Propriétaires
+ON Outils.IDPROPRIO = Propriétaires.IDPROPRIO;
+
+Changement : Les enregistrements associés à `IDPROPRIO = 1` dans `Outils` sont automatiquement supprimés à cause de la contrainte `ON DELETE CASCADE`.
+
+---
+
+ 14. Intérêt d'une clé étrangère
+ 
+L'utilisation d'une clé étrangère garantit l'intégrité entre les tables. Ca veut dire  que :
+- On ne peut pas mettre un `IDPROPRIO` dans `Outils` qui n'existe pas dans `Proprietaires`.
+
+
+--- 
+

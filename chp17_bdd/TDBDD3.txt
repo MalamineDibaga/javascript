@@ -1,0 +1,133 @@
+TDDBDD3
+---
+
+Création d’une base et d’une table :
+
+1. Créer une base de données « users » :
+
+   CREATE DATABASE users;
+   
+
+2. Créer une table « credentials » dans la base « users » avec 2 colonnes (username et password) :
+
+   USE users;
+   CREATE TABLE credentials (
+       username VARCHAR(50),
+       password VARCHAR(50)
+   );
+   
+
+3. Compléter la table avec 3 enregistrements de votre choix :
+   
+   INSERT INTO credentials (username, password) VALUES
+   ('user1', 'password1'),
+   ('user2', 'password2'),
+   ('user3', 'password3');
+   ```
+
+---
+
+Recherche sur les bases du serveur :
+
+4. Repérer la base de données `information_schema` :
+
+   - La base `information_schema` est une base système. ON peut la visualiser dans phpMyAdmin ou via :
+ 
+     SHOW DATABASES;
+
+5. Repérer la table qui stocke le nom de toutes les bases de données :
+
+   - La table `SCHEMATA` dans la base `information_schema` contient ces informations.
+
+6. Rechercher la commande SQL qui permet d’obtenir le nombre de bases de données présentes sur le serveur MySQL :
+
+   SELECT COUNT(*) AS number_of_databases FROM information_schema.SCHEMATA;
+
+
+7. Tester votre réponse sur votre serveur :
+
+   - Exécutez la commande ci-dessus pour vérifier le nombre de bases.
+
+8. **Rechercher la commande SQL qui permet de lire les noms des bases de données :
+   
+   SELECT SCHEMA_NAME AS database_name FROM information_schema.SCHEMATA;
+  
+
+9. Tester votre réponse sur votre serveur :
+   - Exécutez la commande pour voir les noms des bases.
+
+10. Rechercher la commande SQL qui permet de vérifier la présence de la base « users » :
+  
+    SELECT SCHEMA_NAME 
+    FROM information_schema.SCHEMATA 
+    WHERE SCHEMA_NAME = 'users';
+  
+
+---
+
+### Recherche sur les tables du serveur :
+11. Repérer la table qui stocke les noms des tables :
+    - La table `TABLES` dans `information_schema` contient cette information.
+
+12. Rechercher la commande SQL qui permet de relever le nombre de tables dans la base « users » :
+
+    SELECT COUNT(*) AS number_of_tables 
+    FROM information_schema.TABLES 
+    WHERE TABLE_SCHEMA = 'users';
+
+
+13. Tester votre réponse sur votre serveur :
+
+    - Exécutez la commande pour voir le nombre de tables dans `users`.
+
+14. Rechercher la commande SQL qui permet de relever le nom des tables dans la base « users » :
+
+    SELECT TABLE_NAME 
+    FROM information_schema.TABLES 
+    WHERE TABLE_SCHEMA = 'users';
+  
+
+15. Tester votre réponse sur votre serveur :
+    - Exécutez la commande pour voir les noms des tables.
+
+---
+
+Recherche sur les colonnes du serveur :
+16. Repérer la table qui stocke les colonnes :
+    - La table `COLUMNS` dans `information_schema` contient cette information.
+
+17. Rechercher la commande SQL qui permet de relever le nombre de colonnes de la table « credentials » :
+ 
+    SELECT COUNT(*) AS number_of_columns 
+    FROM information_schema.COLUMNS 
+    WHERE TABLE_SCHEMA = 'users' 
+      AND TABLE_NAME = 'credentials';
+
+
+18. Tester votre réponse sur votre serveur :
+    - Exécutez la commande pour voir le nombre de colonnes.
+
+19. Rechercher la commande SQL qui permet de relever le nom des colonnes de la table « credentials » :
+  
+    SELECT COLUMN_NAME 
+    FROM information_schema.COLUMNS 
+    WHERE TABLE_SCHEMA = 'users' 
+      AND TABLE_NAME = 'credentials';
+
+
+20. Tester votre réponse sur votre serveur :
+    - Exécutez la commande pour voir les noms des colonnes.
+
+---
+Lecture du contenu d’une table :
+
+21. Rechercher la commande SQL qui permet de relever le contenu de la table « credentials » :
+  
+    SELECT * FROM users.credentials;
+  
+
+22. Tester votre réponse sur votre serveur :
+
+    - Exécutez la commande pour voir les données de la table `credentials`.
+
+---

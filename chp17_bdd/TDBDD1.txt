@@ -1,0 +1,89 @@
+Activite 3:
+
+Je vais créer la base de données et les tables pour répondre aux questions.
+
+CREATE DATABASE solaire;
+
+Sélectionner la base de données
+
+USE solaire;
+
+Créer les tables
+
+CREATE TABLE utilisateurs (
+  idUser INT NOT NULL AUTO_INCREMENT,
+  login VARCHAR(255),
+  mdp VARCHAR(255),
+  PRIMARY KEY (idUser)
+);
+
+CREATE TABLE mesures (
+  idMesure INT NOT NULL AUTO_INCREMENT,
+  horodatage TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  tension_pan DOUBLE,
+  courant_pan DOUBLE,
+  energie DOUBLE,
+  tension_bat DOUBLE,
+  temperature DOUBLE,
+  idUser INT,
+  PRIMARY KEY (idMesure)
+);
+
+
+
+
+Q1. Expliquer le rôle de la clé primaire « idMesure » de la table « mesures ».
+
+La clé primaire `idMesure` sert à identifier de manière unique chaque mesure 
+enregistrée dans la table `mesures`. Cela permet d'assurer que chaque mesure a un 
+identifiant unique et évite les doublons.
+
+Q2. Écrire en langage SQL la requête permettant d'écrire cette nouvelle acquisition 
+dans la base de données.
+
+INSERT INTO mesures (tension_pan, courant_pan, energie, tension_bat, temperature)
+VALUES (24.0, 18.8, 321.2, 23.8, 34.0);
+
+Q3. À l’aide des documentations PP4 et PP5, donner la requête SQL permettant de 
+créer la table MPPT dans base de données nommée « solaire ».
+
+CREATE TABLE MPPT (
+  IdMPPT INT NOT NULL AUTO_INCREMENT,
+  CAN_ID INT,
+  nom VARCHAR(255),
+  PRIMARY KEY (IdMPPT)
+);
+
+
+Q4. Quel champ doit-on ajouter à la table « mesures » afin de modéliser la relation 
+entre les mesures et la carte MPPT les ayant effectuées.
+
+Il faut ajouter un champ appele `idMPPT` qui servira à référencer l'identifiant du 
+MPPT qui sera responsable des mesures.
+
+Q5. Dans le document réponses, compléter le schéma de la base de données en 
+indiquant le nouveau champ de la table « mesures » ainsi que les cardinalités entre 
+la table « mesures » et la table « MPPT ».
+
+Schéma modifié :
+
+mesures :
+idMesure (PK)
+horodatage
+tension_pan
+courant_pan
+energie
+tension_bat
+temperature
+idUser
+login
+mdp
+
+MPPT :
+IdMPPT (PK)
+CAN_ID
+nom
+
+Les cardinalités sont les suivantes :
+
+- Une mesure appartient à un seul MPPT sachant qu'une cart
