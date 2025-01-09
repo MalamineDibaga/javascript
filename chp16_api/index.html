@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorateur de régions, départements et communes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Explorateur de régions, départements et communes</h1>
+    <select id="regions" onchange="chargerDonnees()">
+        <option value="">Sélectionner une région...</option>
+    </select>
+
+    <div class="menu-dep">
+        <label for="departements">Département :</label>
+        <select id="departements" onchange="chargerDonnees()">
+            <option value="">Sélectionner un département...</option>
+        </select>
+    </div>
+
+    <div class="menu-communes">
+        <label for="communes">Commune :</label>
+        <select id="communes">
+            <option value="">Sélectionner une commune...</option>
+        </select>
+    </div>
+
+    <script src="api1.js"></script>
+</body>
+</html>

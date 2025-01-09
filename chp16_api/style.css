@@ -1,0 +1,19 @@
+body {
+
+    font-family: Arial, sans-serif;
+}
+
+select {
+    padding: 10px;
+    width: 200px;
+
+}
+
+.menu-dep, .menu-communes {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}

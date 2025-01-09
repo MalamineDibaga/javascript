@@ -1,0 +1,342 @@
+Je vais expliquer chaque ligne de code, comme si tu étais un débutant, et je vais aussi commenter chaque section pour que tu puisses comprendre le fonctionnement de l'application Node.js avec MySQL et les différentes routes de l'API.
+
+---
+
+### **1. Créer la base de données `students_db`**
+
+```sql
+CREATE DATABASE students_db;
+```
+- **`CREATE DATABASE students_db;`** : Cette commande crée une nouvelle base de données nommée `students_db`. Cela va permettre de stocker les informations de nos étudiants.
+
+---
+
+### **2. Créer la table `students`**
+
+```sql
+USE students_db;
+
+CREATE TABLE students (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  age INT NOT NULL
+);
+```
+
+- **`USE students_db;`** : Cette commande sélectionne la base de données `students_db` afin de pouvoir y créer des tables et y insérer des données.
+  
+- **`CREATE TABLE students`** : Crée une table appelée `students` pour stocker des informations sur les étudiants.
+  - **`id INT AUTO_INCREMENT PRIMARY KEY`** : Crée un identifiant unique pour chaque étudiant. Ce champ s'incrémente automatiquement chaque fois qu'un nouvel étudiant est ajouté.
+  - **`name VARCHAR(255) NOT NULL`** : Un champ pour le nom de l'étudiant. Il s'agit d'une chaîne de caractères d'une longueur maximale de 255 caractères. `NOT NULL` signifie que le nom est obligatoire.
+  - **`email VARCHAR(255) NOT NULL UNIQUE`** : Un champ pour l'email de l'étudiant. C'est aussi une chaîne de caractères, et `UNIQUE` garantit que chaque email est unique dans la base de données.
+  - **`age INT NOT NULL`** : Un champ pour l'âge de l'étudiant. C'est un nombre entier (`INT`), et il ne peut pas être vide (`NOT NULL`).
+
+---
+
+### **3. Insérer quelques étudiants pour tester**
+
+```sql
+INSERT INTO students (name, email, age) VALUES
+('Alice', 'alice@example.com', 20),
+('Bob', 'bob@example.com', 22);
+```
+- **`INSERT INTO students`** : Cette commande permet d'ajouter de nouvelles lignes (étudiants) dans la table `students`.
+  - **`('Alice', 'alice@example.com', 20)`** : Ajoute un étudiant nommé Alice, avec l'email `alice@example.com` et âgée de 20 ans.
+  - **`('Bob', 'bob@example.com', 22)`** : Ajoute un autre étudiant nommé Bob, avec l'email `bob@example.com` et âgé de 22 ans.
+
+---
+
+### **Création du projet Node.js**
+
+### **4. Créer un répertoire `api` et initialiser le projet Node.js**
+
+```bash
+mkdir api
+cd api
+npm init -y 
+```
+- **`mkdir api`** : Crée un nouveau dossier appelé `api` pour contenir ton projet.
+- **`cd api`** : Va dans ce dossier.
+- **`npm init -y`** : Initialise un projet Node.js avec un fichier `package.json` contenant les informations par défaut.
+
+---
+
+### **5. Installer les dépendances nécessaires**
+
+```bash
+npm install express mysql2 dotenv
+```
+
+- **`express`** : Un framework pour Node.js qui facilite la création d'API et de serveurs web.
+- **`mysql2`** : Un package qui permet à Node.js de se connecter à une base de données MySQL.
+- **`dotenv`** : Permet de charger des variables d'environnement à partir d'un fichier `.env` (pour des informations sensibles comme les mots de passe).
+
+---
+
+### **Configuration de la connexion à MySQL**
+
+### **6. Créer un fichier `.env` pour les informations de connexion**
+
+```env
+DB_HOST=localhost
+DB_USER=ciel
+DB_PASSWORD=ciel
+DB_NAME=students_db
+PORT=3000
+```
+
+- **`DB_HOST=localhost`** : L'adresse du serveur MySQL, ici `localhost` car il est sur la même machine.
+- **`DB_USER=ciel`** : Le nom d'utilisateur pour se connecter à la base de données MySQL.
+- **`DB_PASSWORD=ciel`** : Le mot de passe pour l'utilisateur MySQL.
+- **`DB_NAME=students_db`** : Le nom de la base de données à utiliser, ici `students_db`.
+- **`PORT=3000`** : Le port sur lequel ton serveur Express va écouter les requêtes (par défaut, 3000).
+
+---
+
+### **7. Créer un fichier `db.js` pour gérer la connexion MySQL**
+
+```js
+const mysql = require('mysql2');
+const dotenv = require('dotenv');
+dotenv.config();
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
+module.exports = pool.promise();
+```
+
+- **`const mysql = require('mysql2');`** : Importe la bibliothèque `mysql2` pour se connecter à la base de données MySQL.
+- **`const dotenv = require('dotenv');`** : Importe la bibliothèque `dotenv` pour charger les variables d'environnement du fichier `.env`.
+- **`dotenv.config();`** : Charge les variables d'environnement depuis le fichier `.env`.
+- **`const pool = mysql.createPool({...})`** : Crée un "pool" de connexions MySQL, ce qui permet de réutiliser les connexions ouvertes pour améliorer la performance.
+- **`module.exports = pool.promise();`** : Exporte le pool de connexions avec des promesses, ce qui permet d'utiliser `async/await` pour interagir avec la base de données.
+
+---
+
+### **Création de l'API REST**
+
+### **8. Créer un fichier `server.js` pour gérer le serveur**
+
+```js
+const express = require('express');
+const dotenv = require('dotenv');
+const db = require('./db');
+const app = express();
+app.use(express.json());
+
+const PORT = process.env.PORT || 3000;
+
+// Route de test pour vérifier que le serveur fonctionne
+app.get('/', (req, res) => {
+  res.send('API REST Node.js + MySQL');
+});
+
+// Démarrer le serveur
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur http://localhost:${PORT}`);
+});
+```
+
+- **`const express = require('express');`** : Importe le framework Express pour gérer le serveur.
+- **`const dotenv = require('dotenv');`** : Importe la bibliothèque `dotenv` pour charger les variables d'environnement.
+- **`const db = require('./db');`** : Importe la configuration de la connexion MySQL.
+- **`const app = express();`** : Crée une nouvelle instance d'application Express.
+- **`app.use(express.json());`** : Permet à Express de traiter les données JSON envoyées dans les requêtes HTTP.
+- **`const PORT = process.env.PORT || 3000;`** : Définit le port sur lequel le serveur va écouter. Si le port est défini dans `.env`, il sera utilisé. Sinon, le port 3000 sera utilisé.
+- **`app.get('/', (req, res) => {...})`** : Crée une route qui répond avec un message de confirmation lorsque tu accèdes à `http://localhost:3000`.
+- **`app.listen(PORT, () => {...})`** : Démarre le serveur et l'écoute sur le port spécifié.
+
+---
+
+### **9. Tester le serveur**
+Une fois ton serveur démarré avec `node server.js`, tu peux accéder à `http://localhost:3000` dans ton navigateur pour vérifier que tout fonctionne. Tu devrais voir "API REST Node.js + MySQL".
+
+---
+
+### **Gestion des routes de l'API**
+
+### **10. Route `GET /students` pour récupérer tous les étudiants**
+
+```js
+app.get('/students', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM students');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+```
+
+- **`app.get('/students', async (req, res) => {...})`** : Crée une route GET qui récupère tous les étudiants de la base de données.
+- **`const [rows] = await db.query('SELECT * FROM students');`** : Exécute une requête SQL pour récupérer tous les étudiants.
+- **`res.json(rows);`** : Envoie les résultats sous forme de JSON au client.
+- **`catch (err)`** : Si une erreur se produit, renvoie un code d'erreur 500 avec le message de l'erreur.
+
+---
+
+### **11. Signification du code 500**
+
+- **`500`** : Cela signifie qu'une erreur est survenue sur le serveur (par exemple, un problème avec la base de données).
+
+---
+
+### **12. Tester avec `curl`**
+
+```bash
+curl -X GET http://localhost:3000/students
+```
+
+Cette commande envoie une requête GET à l'API pour récupérer tous les étudiants.
+
+---
+
+### **13. Route `POST /students` pour ajouter un étudiant**
+
+```js
+app.post('/students', async (req, res) => {
+  const { name, email, age } = req.body;
+  try {
+    const sql = `INSERT INTO students (name,
+
+ email, age) VALUES ('${name}', '${email}', ${age})`;
+    const [result] = await db.query(sql);
+    res.status(201).json({ id: result.insertId, name, email, age });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+```
+
+- **`app.post('/students', async (req, res) => {...})`** : Crée une route POST pour ajouter un nouvel étudiant dans la base de données.
+- **`const { name, email, age } = req.body;`** : Extrait les données envoyées dans la requête POST.
+- **`const sql = ...`** : Prépare une requête SQL pour insérer ces données dans la table `students`.
+- **`res.status(201).json(...)`** : Si l'ajout est réussi, renvoie un code de succès 201 avec les informations de l'étudiant ajouté.
+
+---
+
+### **14. Signification du code 201**
+
+- **`201`** : Cela signifie que la ressource a été créée avec succès sur le serveur.
+
+---
+
+### **15. Tester avec `curl`**
+
+```bash
+curl -X POST http://localhost:3000/students \
+-H "Content-Type: application/json" \
+-d '{"name": "Alice", "email": "alice@example.com", "age": 20}'
+```
+
+Envoie une requête POST pour ajouter un étudiant.
+
+---
+
+### **16. Route `GET /students/:id` pour récupérer un étudiant par ID**
+
+```js
+app.get('/students/:id', async (req, res) => {
+  try {
+    const sql = `SELECT * FROM students WHERE id = ${req.params.id}`;
+    const [rows] = await db.query(sql);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+```
+
+- **`app.get('/students/:id', async (req, res) => {...})`** : Crée une route GET qui permet de récupérer un étudiant par son `id`.
+- **`const sql = ...`** : Exécute une requête pour trouver un étudiant avec l'ID fourni dans l'URL.
+- **`if (rows.length === 0)`** : Si aucun étudiant n'est trouvé, renvoie une erreur 404.
+
+---
+
+### **17. Tester avec `curl` pour l'étudiant 2**
+
+```bash
+curl -X GET http://localhost:3000/students/2
+```
+
+Cette commande récupère l'étudiant ayant l'ID 2.
+
+---
+
+### **18. Route `PUT /students/:id` pour mettre à jour un étudiant**
+
+```js
+app.put('/students/:id', async (req, res) => {
+  const { name, email, age } = req.body;
+  const id = req.params.id;
+  try {
+    const sql = `UPDATE students SET name = '${name}', email = '${email}', age = ${age} WHERE id = ${id}`;
+    const [result] = await db.query(sql);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    res.json({ message: 'Student updated' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+```
+
+- **`app.put('/students/:id', async (req, res) => {...})`** : Crée une route PUT pour mettre à jour un étudiant par son `id`.
+- **`const sql = ...`** : Exécute une requête SQL pour mettre à jour les informations de l'étudiant.
+- **`if (result.affectedRows === 0)`** : Si l'étudiant n'existe pas, renvoie une erreur 404.
+
+---
+
+### **19. Tester avec `curl` pour modifier l'âge de l'étudiant 1**
+
+```bash
+curl -X PUT http://localhost:3000/students/1 \
+-H "Content-Type: application/json" \
+-d '{"name": "Alice", "email": "alice@example.com", "age": 21}'
+```
+
+Cette commande modifie l'âge de l'étudiant avec l'ID 1.
+
+---
+
+### **20. Route `DELETE /students/:id` pour supprimer un étudiant**
+
+```js
+app.delete('/students/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const sql = `DELETE FROM students WHERE id = ${id}`;
+    const [result] = await db.query(sql);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    res.json({ message: 'Student deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+```
+
+- **`app.delete('/students/:id', async (req, res) => {...})`** : Crée une route DELETE pour supprimer un étudiant.
+- **`const sql = ...`** : Prépare une requête SQL pour supprimer l'étudiant ayant l'ID spécifié.
+- **`if (result.affectedRows === 0)`** : Si aucun étudiant n'est trouvé, renvoie une erreur 404.
+
+---
+
+### **21. Tester avec `curl` pour supprimer l'étudiant 2**
+
+```bash
+curl -X DELETE http://localhost:3000/students/2
+```
+
+Cette commande supprime l'étudiant ayant l'ID 2.
