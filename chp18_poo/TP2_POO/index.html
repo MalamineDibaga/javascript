@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard des Afficheurs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Gestion des Afficheurs Métro</h1>
+
+        <!-- Section pour ajouter un afficheur -->
+        <section class="form-section">
+            <h2>Ajouter un Afficheur</h2>
+            <form id="form-afficheur">
+                <label for="id">ID :</label>
+                <input type="number" id="id" name="id" required> <br><br>
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" required> <br><br>
+                <label for="localite">Localité :</label>
+                <input type="text" id="localite" name="localite" required> <br><br>
+                <label for="message">Message :</label>
+                <input type="text" id="message" name="message" required> <br><br>
+                <button type="submit">Ajouter</button>
+            </form>
+        </section>
+
+        <!-- Section pour afficher les afficheurs -->
+        <section class="list-section">
+            <h2>Liste des Afficheurs</h2>
+            <div id="afficheurs-list"></div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
